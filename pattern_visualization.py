@@ -182,6 +182,7 @@ for y in range(len(class_loc)):
         except:
             class2_members = 0
 
+
         universe_members = class1_members + class2_members
         class1_percentage = (class1_members / universe_members)*100
         class2_percentage = (class2_members / universe_members)*100
@@ -202,64 +203,69 @@ for y in range(len(class_loc)):
         pattern2_radius = math.sqrt(pattern2_members / universe_members)
 
 
-        # TARGET CLASS VISUALIZATION
-        circle1 = plt.Circle((0.5, 0.5), universe_radius, color='r', clip_on=False)
-        circle2 = plt.Circle((0.5, 0.5), class1_radius, color='blue', clip_on=False)
-        circle3 = plt.Circle((0.5, 0.5), pattern1_radius, color='g', clip_on=False)
+        totalSupport = (class1_support/100.0) - (class2_support/100.0)
+        c_diff = pattern1_members -pattern2_members
+        c = pattern1_members / (pattern1_members + pattern2_members)
 
-        fig, ax = plt.subplots()
-        ax.add_artist(circle1)
-        ax.add_artist(circle2)
-        ax.add_artist(circle3)
+        if (totalSupport > 0.3) & (c_diff > 30) & (c > 0.6):
+            # TARGET CLASS VISUALIZATION
+            circle1 = plt.Circle((0.5, 0.5), universe_radius, color='r', clip_on=False)
+            circle2 = plt.Circle((0.5, 0.5), class1_radius, color='blue', clip_on=False)
+            circle3 = plt.Circle((0.5, 0.5), pattern1_radius, color='g', clip_on=False)
 
-        
-        textstr1 = title1
-        textstr2 = pattern_name
-        textstr3 = f'Confidence: {file_contents[conf_list_1[i][0]:conf_list_1[i][1]]}\nDataset\'s Support: {file_contents[dsupport_list_1[i][0]:dsupport_list_1[i][1]]}'
-        props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-        ax.text(-0.75, 1.60, textstr1, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
-        ax.text(-0.75, -0.65, textstr2, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
-        ax.text(1.25, -0.45, textstr3, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
-        
+            fig, ax = plt.subplots()
+            ax.add_artist(circle1)
+            ax.add_artist(circle2)
+            ax.add_artist(circle3)
 
-        red_circle = mpatches.Patch(color='r', label=f'Total Data = {universe_members}')
-        blue_circle = mpatches.Patch(color='blue', label=f'Class Size = {round(class1_percentage,2)}% of the total data')
-        green_circle = mpatches.Patch(color='g', label=f'Pattern Support Size = {round(class1_support,2)}% of the class size')
+            
+            textstr1 = title1
+            textstr2 = pattern_name
+            textstr3 = f'Confidence: {file_contents[conf_list_1[i][0]:conf_list_1[i][1]]}\nDataset\'s Support: {file_contents[dsupport_list_1[i][0]:dsupport_list_1[i][1]]}'
+            props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
+            ax.text(-0.75, 1.60, textstr1, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
+            ax.text(-0.75, -0.65, textstr2, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
+            ax.text(1.25, -0.45, textstr3, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
+            
 
-        plt.legend(handles=[red_circle, blue_circle, green_circle], bbox_to_anchor=(1.75, 1.5))
+            red_circle = mpatches.Patch(color='r', label=f'Total Data = {universe_members}')
+            blue_circle = mpatches.Patch(color='blue', label=f'Class Size = {round(class1_percentage,2)}% of the total data')
+            green_circle = mpatches.Patch(color='g', label=f'Pattern Support Size = {round(class1_support,2)}% of the class size')
 
-        plt.axis('off')
-        filename = f'Visualization//{featurename}//{class_short_name}//01_Features//{i}_TargetClass.png'
-        plt.ioff()
-        plt.savefig(filename, bbox_inches='tight')
-        
-        # COMPLEMENT CLASS VISUALIZATION
-        circle1 = plt.Circle((0.5, 0.5), universe_radius, color='r', clip_on=False)
-        circle2 = plt.Circle((0.5, 0.5), class2_radius, color='blue', clip_on=False)
-        circle3 = plt.Circle((0.5, 0.5), pattern2_radius, color='g', clip_on=False)
+            plt.legend(handles=[red_circle, blue_circle, green_circle], bbox_to_anchor=(1.75, 1.5))
 
-        fig, ax = plt.subplots()
-        ax.add_artist(circle1)
-        ax.add_artist(circle2)
-        ax.add_artist(circle3)
+            plt.axis('off')
+            filename = f'Visualization//{featurename}//{class_short_name}//01_Features//{i}_TargetClass.png'
+            plt.ioff()
+            plt.savefig(filename, bbox_inches='tight')
+            
+            # COMPLEMENT CLASS VISUALIZATION
+            circle1 = plt.Circle((0.5, 0.5), universe_radius, color='r', clip_on=False)
+            circle2 = plt.Circle((0.5, 0.5), class2_radius, color='blue', clip_on=False)
+            circle3 = plt.Circle((0.5, 0.5), pattern2_radius, color='g', clip_on=False)
 
-        textstr1 = title2
-        textstr2 = pattern_name
-        props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-        ax.text(-0.75, 1.60, textstr1, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
-        ax.text(-0.75, -0.65, textstr2, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
-        ax.text(1.25, -0.45, textstr3, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
+            fig, ax = plt.subplots()
+            ax.add_artist(circle1)
+            ax.add_artist(circle2)
+            ax.add_artist(circle3)
 
-        red_circle = mpatches.Patch(color='r', label=f'Total Data = {universe_members}')
-        blue_circle = mpatches.Patch(color='blue', label=f'Class Size = {round(class2_percentage,2)}% of the total data')
-        green_circle = mpatches.Patch(color='g', label=f'Pattern Support Size = {round(class2_support,2)}% of the class size')
+            textstr1 = title2
+            textstr2 = pattern_name
+            props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
+            ax.text(-0.75, 1.60, textstr1, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
+            ax.text(-0.75, -0.65, textstr2, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
+            ax.text(1.25, -0.45, textstr3, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
 
-        plt.legend(handles=[red_circle, blue_circle, green_circle], bbox_to_anchor=(1.75, 1.5))
+            red_circle = mpatches.Patch(color='r', label=f'Total Data = {universe_members}')
+            blue_circle = mpatches.Patch(color='blue', label=f'Class Size = {round(class2_percentage,2)}% of the total data')
+            green_circle = mpatches.Patch(color='g', label=f'Pattern Support Size = {round(class2_support,2)}% of the class size')
 
-        plt.axis('off')
-        filename = f'Visualization//{featurename}//{class_short_name}//01_Features//{i}_ComplementaryClass.png'
-        plt.ioff()
-        plt.savefig(filename, bbox_inches='tight')
+            plt.legend(handles=[red_circle, blue_circle, green_circle], bbox_to_anchor=(1.75, 1.5))
+
+            plt.axis('off')
+            filename = f'Visualization//{featurename}//{class_short_name}//01_Features//{i}_ComplementaryClass.png'
+            plt.ioff()
+            plt.savefig(filename, bbox_inches='tight')
 
 
     # Visualizar patrones de 2 features
@@ -305,65 +311,69 @@ for y in range(len(class_loc)):
         pattern1_radius = math.sqrt(pattern1_members / universe_members)
         pattern2_radius = math.sqrt(pattern2_members / universe_members)
 
+        totalSupport = (class1_support/100.0) - (class2_support/100.0)
+        c_diff = pattern1_members -pattern2_members
+        c = pattern1_members / (pattern1_members + pattern2_members)
 
-        # TARGET CLASS VISUALIZATION
-        circle1 = plt.Circle((0.5, 0.5), universe_radius, color='r', clip_on=False)
-        circle2 = plt.Circle((0.5, 0.5), class1_radius, color='blue', clip_on=False)
-        circle3 = plt.Circle((0.5, 0.5), pattern1_radius, color='g', clip_on=False)
+        if (totalSupport > 0.3) & (c_diff > 30) & (c > 0.6):
+            # TARGET CLASS VISUALIZATION
+            circle1 = plt.Circle((0.5, 0.5), universe_radius, color='r', clip_on=False)
+            circle2 = plt.Circle((0.5, 0.5), class1_radius, color='blue', clip_on=False)
+            circle3 = plt.Circle((0.5, 0.5), pattern1_radius, color='g', clip_on=False)
 
-        fig, ax = plt.subplots()
-        ax.add_artist(circle1)
-        ax.add_artist(circle2)
-        ax.add_artist(circle3)
+            fig, ax = plt.subplots()
+            ax.add_artist(circle1)
+            ax.add_artist(circle2)
+            ax.add_artist(circle3)
 
-        
-        textstr1 = title1
-        textstr2 = pattern_name
-        textstr3 = f'Confidence: {file_contents[conf_list_2[i][0]:conf_list_2[i][1]]}\nDataset\'s Support: {file_contents[dsupport_list_2[i][0]:dsupport_list_2[i][1]]}'
-        props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-        ax.text(-0.75, 1.60, textstr1, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
-        ax.text(-0.75, -0.65, textstr2, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
-        ax.text(1.25, -0.45, textstr3, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
-        
+            
+            textstr1 = title1
+            textstr2 = pattern_name
+            textstr3 = f'Confidence: {file_contents[conf_list_2[i][0]:conf_list_2[i][1]]}\nDataset\'s Support: {file_contents[dsupport_list_2[i][0]:dsupport_list_2[i][1]]}'
+            props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
+            ax.text(-0.75, 1.60, textstr1, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
+            ax.text(-0.75, -0.65, textstr2, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
+            ax.text(1.25, -0.45, textstr3, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
+            
 
-        red_circle = mpatches.Patch(color='r', label=f'Total Data = {universe_members}')
-        blue_circle = mpatches.Patch(color='blue', label=f'Class Size = {round(class1_percentage,2)}% of the total data')
-        green_circle = mpatches.Patch(color='g', label=f'Pattern Support Size = {round(class1_support,2)}% of the class size')
+            red_circle = mpatches.Patch(color='r', label=f'Total Data = {universe_members}')
+            blue_circle = mpatches.Patch(color='blue', label=f'Class Size = {round(class1_percentage,2)}% of the total data')
+            green_circle = mpatches.Patch(color='g', label=f'Pattern Support Size = {round(class1_support,2)}% of the class size')
 
-        plt.legend(handles=[red_circle, blue_circle, green_circle], bbox_to_anchor=(1.75, 1.5))
+            plt.legend(handles=[red_circle, blue_circle, green_circle], bbox_to_anchor=(1.75, 1.5))
 
-        plt.axis('off')
-        filename = f'Visualization//{featurename}//{class_short_name}//02_Features//{i}_TargetClass.png'
-        plt.ioff()
-        plt.savefig(filename, bbox_inches='tight')
-        
-        # COMPLEMENT CLASS VISUALIZATION
-        circle1 = plt.Circle((0.5, 0.5), universe_radius, color='r', clip_on=False)
-        circle2 = plt.Circle((0.5, 0.5), class2_radius, color='blue', clip_on=False)
-        circle3 = plt.Circle((0.5, 0.5), pattern2_radius, color='g', clip_on=False)
+            plt.axis('off')
+            filename = f'Visualization//{featurename}//{class_short_name}//02_Features//{i}_TargetClass.png'
+            plt.ioff()
+            plt.savefig(filename, bbox_inches='tight')
+            
+            # COMPLEMENT CLASS VISUALIZATION
+            circle1 = plt.Circle((0.5, 0.5), universe_radius, color='r', clip_on=False)
+            circle2 = plt.Circle((0.5, 0.5), class2_radius, color='blue', clip_on=False)
+            circle3 = plt.Circle((0.5, 0.5), pattern2_radius, color='g', clip_on=False)
 
-        fig, ax = plt.subplots()
-        ax.add_artist(circle1)
-        ax.add_artist(circle2)
-        ax.add_artist(circle3)
+            fig, ax = plt.subplots()
+            ax.add_artist(circle1)
+            ax.add_artist(circle2)
+            ax.add_artist(circle3)
 
-        textstr1 = title2
-        textstr2 = pattern_name
-        props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-        ax.text(-0.75, 1.60, textstr1, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
-        ax.text(-0.75, -0.65, textstr2, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
-        ax.text(1.25, -0.45, textstr3, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
+            textstr1 = title2
+            textstr2 = pattern_name
+            props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
+            ax.text(-0.75, 1.60, textstr1, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
+            ax.text(-0.75, -0.65, textstr2, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
+            ax.text(1.25, -0.45, textstr3, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
 
-        red_circle = mpatches.Patch(color='r', label=f'Total Data = {universe_members}')
-        blue_circle = mpatches.Patch(color='blue', label=f'Class Size = {round(class2_percentage,2)}% of the total data')
-        green_circle = mpatches.Patch(color='g', label=f'Pattern Support Size = {round(class2_support,2)}% of the class size')
+            red_circle = mpatches.Patch(color='r', label=f'Total Data = {universe_members}')
+            blue_circle = mpatches.Patch(color='blue', label=f'Class Size = {round(class2_percentage,2)}% of the total data')
+            green_circle = mpatches.Patch(color='g', label=f'Pattern Support Size = {round(class2_support,2)}% of the class size')
 
-        plt.legend(handles=[red_circle, blue_circle, green_circle], bbox_to_anchor=(1.75, 1.5))
+            plt.legend(handles=[red_circle, blue_circle, green_circle], bbox_to_anchor=(1.75, 1.5))
 
-        plt.axis('off')
-        filename = f'Visualization//{featurename}//{class_short_name}//02_Features//{i}_ComplementaryClass.png'
-        plt.ioff()
-        plt.savefig(filename, bbox_inches='tight')
+            plt.axis('off')
+            filename = f'Visualization//{featurename}//{class_short_name}//02_Features//{i}_ComplementaryClass.png'
+            plt.ioff()
+            plt.savefig(filename, bbox_inches='tight')
 
     # # Visualizar patrones de 3 features
     for i in range(len(patt_list_3)):
@@ -408,65 +418,69 @@ for y in range(len(class_loc)):
         pattern1_radius = math.sqrt(pattern1_members / universe_members)
         pattern2_radius = math.sqrt(pattern2_members / universe_members)
 
+        totalSupport = (class1_support/100.0) - (class2_support/100.0)
+        c_diff = pattern1_members -pattern2_members
+        c = pattern1_members / (pattern1_members + pattern2_members)
 
-        # TARGET CLASS VISUALIZATION
-        circle1 = plt.Circle((0.5, 0.5), universe_radius, color='r', clip_on=False)
-        circle2 = plt.Circle((0.5, 0.5), class1_radius, color='blue', clip_on=False)
-        circle3 = plt.Circle((0.5, 0.5), pattern1_radius, color='g', clip_on=False)
+        if (totalSupport > 0.3) & (c_diff > 30) & (c > 0.6):
+            # TARGET CLASS VISUALIZATION
+            circle1 = plt.Circle((0.5, 0.5), universe_radius, color='r', clip_on=False)
+            circle2 = plt.Circle((0.5, 0.5), class1_radius, color='blue', clip_on=False)
+            circle3 = plt.Circle((0.5, 0.5), pattern1_radius, color='g', clip_on=False)
 
-        fig, ax = plt.subplots()
-        ax.add_artist(circle1)
-        ax.add_artist(circle2)
-        ax.add_artist(circle3)
+            fig, ax = plt.subplots()
+            ax.add_artist(circle1)
+            ax.add_artist(circle2)
+            ax.add_artist(circle3)
 
-        
-        textstr1 = title1
-        textstr2 = pattern_name
-        textstr3 = f'Confidence: {file_contents[conf_list_3[i][0]:conf_list_3[i][1]]}\nDataset\'s Support: {file_contents[dsupport_list_3[i][0]:dsupport_list_3[i][1]]}'
-        props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-        ax.text(-0.75, 1.60, textstr1, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
-        ax.text(-0.75, -0.65, textstr2, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
-        ax.text(1.25, -0.45, textstr3, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
-        
+            
+            textstr1 = title1
+            textstr2 = pattern_name
+            textstr3 = f'Confidence: {file_contents[conf_list_3[i][0]:conf_list_3[i][1]]}\nDataset\'s Support: {file_contents[dsupport_list_3[i][0]:dsupport_list_3[i][1]]}'
+            props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
+            ax.text(-0.75, 1.60, textstr1, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
+            ax.text(-0.75, -0.65, textstr2, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
+            ax.text(1.25, -0.45, textstr3, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
+            
 
-        red_circle = mpatches.Patch(color='r', label=f'Total Data = {universe_members}')
-        blue_circle = mpatches.Patch(color='blue', label=f'Class Size = {round(class1_percentage,2)}% of the total data')
-        green_circle = mpatches.Patch(color='g', label=f'Pattern Support Size = {round(class1_support,2)}% of the class size')
+            red_circle = mpatches.Patch(color='r', label=f'Total Data = {universe_members}')
+            blue_circle = mpatches.Patch(color='blue', label=f'Class Size = {round(class1_percentage,2)}% of the total data')
+            green_circle = mpatches.Patch(color='g', label=f'Pattern Support Size = {round(class1_support,2)}% of the class size')
 
-        plt.legend(handles=[red_circle, blue_circle, green_circle], bbox_to_anchor=(1.75, 1.5))
+            plt.legend(handles=[red_circle, blue_circle, green_circle], bbox_to_anchor=(1.75, 1.5))
 
-        plt.axis('off')
-        filename = f'Visualization//{featurename}//{class_short_name}//03_Features//{i}_TargetClass.png'
-        plt.ioff()
-        plt.savefig(filename, bbox_inches='tight')
-        
-        # COMPLEMENT CLASS VISUALIZATION
-        circle1 = plt.Circle((0.5, 0.5), universe_radius, color='r', clip_on=False)
-        circle2 = plt.Circle((0.5, 0.5), class2_radius, color='blue', clip_on=False)
-        circle3 = plt.Circle((0.5, 0.5), pattern2_radius, color='g', clip_on=False)
+            plt.axis('off')
+            filename = f'Visualization//{featurename}//{class_short_name}//03_Features//{i}_TargetClass.png'
+            plt.ioff()
+            plt.savefig(filename, bbox_inches='tight')
+            
+            # COMPLEMENT CLASS VISUALIZATION
+            circle1 = plt.Circle((0.5, 0.5), universe_radius, color='r', clip_on=False)
+            circle2 = plt.Circle((0.5, 0.5), class2_radius, color='blue', clip_on=False)
+            circle3 = plt.Circle((0.5, 0.5), pattern2_radius, color='g', clip_on=False)
 
-        fig, ax = plt.subplots()
-        ax.add_artist(circle1)
-        ax.add_artist(circle2)
-        ax.add_artist(circle3)
+            fig, ax = plt.subplots()
+            ax.add_artist(circle1)
+            ax.add_artist(circle2)
+            ax.add_artist(circle3)
 
-        textstr1 = title2
-        textstr2 = pattern_name
-        props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-        ax.text(-0.75, 1.60, textstr1, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
-        ax.text(-0.75, -0.65, textstr2, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
-        ax.text(1.25, -0.45, textstr3, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
+            textstr1 = title2
+            textstr2 = pattern_name
+            props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
+            ax.text(-0.75, 1.60, textstr1, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
+            ax.text(-0.75, -0.65, textstr2, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
+            ax.text(1.25, -0.45, textstr3, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
 
-        red_circle = mpatches.Patch(color='r', label=f'Total Data = {universe_members}')
-        blue_circle = mpatches.Patch(color='blue', label=f'Class Size = {round(class2_percentage,2)}% of the total data')
-        green_circle = mpatches.Patch(color='g', label=f'Pattern Support Size = {round(class2_support,2)}% of the class size')
+            red_circle = mpatches.Patch(color='r', label=f'Total Data = {universe_members}')
+            blue_circle = mpatches.Patch(color='blue', label=f'Class Size = {round(class2_percentage,2)}% of the total data')
+            green_circle = mpatches.Patch(color='g', label=f'Pattern Support Size = {round(class2_support,2)}% of the class size')
 
-        plt.legend(handles=[red_circle, blue_circle, green_circle], bbox_to_anchor=(1.75, 1.5))
+            plt.legend(handles=[red_circle, blue_circle, green_circle], bbox_to_anchor=(1.75, 1.5))
 
-        plt.axis('off')
-        filename = f'Visualization//{featurename}//{class_short_name}//03_Features//{i}_ComplementaryClass.png'
-        plt.ioff()
-        plt.savefig(filename, bbox_inches='tight')
+            plt.axis('off')
+            filename = f'Visualization//{featurename}//{class_short_name}//03_Features//{i}_ComplementaryClass.png'
+            plt.ioff()
+            plt.savefig(filename, bbox_inches='tight')
 
     # Visualizar patrones de 4 features
     for i in range(len(patt_list_4)):
@@ -511,62 +525,66 @@ for y in range(len(class_loc)):
         pattern1_radius = math.sqrt(pattern1_members / universe_members)
         pattern2_radius = math.sqrt(pattern2_members / universe_members)
 
+        totalSupport = (class1_support/100.0) - (class2_support/100.0)
+        c_diff = pattern1_members -pattern2_members
+        c = pattern1_members / (pattern1_members + pattern2_members)
 
-        # TARGET CLASS VISUALIZATION
-        circle1 = plt.Circle((0.5, 0.5), universe_radius, color='r', clip_on=False)
-        circle2 = plt.Circle((0.5, 0.5), class1_radius, color='blue', clip_on=False)
-        circle3 = plt.Circle((0.5, 0.5), pattern1_radius, color='g', clip_on=False)
+        if (totalSupport > 0.3) & (c_diff > 30) & (c > 0.6):
+            # TARGET CLASS VISUALIZATION
+            circle1 = plt.Circle((0.5, 0.5), universe_radius, color='r', clip_on=False)
+            circle2 = plt.Circle((0.5, 0.5), class1_radius, color='blue', clip_on=False)
+            circle3 = plt.Circle((0.5, 0.5), pattern1_radius, color='g', clip_on=False)
 
-        fig, ax = plt.subplots()
-        ax.add_artist(circle1)
-        ax.add_artist(circle2)
-        ax.add_artist(circle3)
+            fig, ax = plt.subplots()
+            ax.add_artist(circle1)
+            ax.add_artist(circle2)
+            ax.add_artist(circle3)
 
-        
-        textstr1 = title1
-        textstr2 = pattern_name
-        textstr3 = f'Confidence: {file_contents[conf_list_4[i][0]:conf_list_4[i][1]]}\nDataset\'s Support: {file_contents[dsupport_list_4[i][0]:dsupport_list_4[i][1]]}'
-        props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-        ax.text(-0.75, 1.60, textstr1, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
-        ax.text(-0.75, -0.65, textstr2, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
-        ax.text(1.25, -0.45, textstr3, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
-        
+            
+            textstr1 = title1
+            textstr2 = pattern_name
+            textstr3 = f'Confidence: {file_contents[conf_list_4[i][0]:conf_list_4[i][1]]}\nDataset\'s Support: {file_contents[dsupport_list_4[i][0]:dsupport_list_4[i][1]]}'
+            props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
+            ax.text(-0.75, 1.60, textstr1, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
+            ax.text(-0.75, -0.65, textstr2, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
+            ax.text(1.25, -0.45, textstr3, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
+            
 
-        red_circle = mpatches.Patch(color='r', label=f'Total Data = {universe_members}')
-        blue_circle = mpatches.Patch(color='blue', label=f'Class Size = {round(class1_percentage,2)}% of the total data')
-        green_circle = mpatches.Patch(color='g', label=f'Pattern Support Size = {round(class1_support,2)}% of the class size')
+            red_circle = mpatches.Patch(color='r', label=f'Total Data = {universe_members}')
+            blue_circle = mpatches.Patch(color='blue', label=f'Class Size = {round(class1_percentage,2)}% of the total data')
+            green_circle = mpatches.Patch(color='g', label=f'Pattern Support Size = {round(class1_support,2)}% of the class size')
 
-        plt.legend(handles=[red_circle, blue_circle, green_circle], bbox_to_anchor=(1.75, 1.5))
+            plt.legend(handles=[red_circle, blue_circle, green_circle], bbox_to_anchor=(1.75, 1.5))
 
-        plt.axis('off')
-        filename = f'Visualization//{featurename}//{class_short_name}//04_Features//{i}_TargetClass.png'
-        plt.ioff()
-        plt.savefig(filename, bbox_inches='tight')
-        
-        # COMPLEMENT CLASS VISUALIZATION
-        circle1 = plt.Circle((0.5, 0.5), universe_radius, color='r', clip_on=False)
-        circle2 = plt.Circle((0.5, 0.5), class2_radius, color='blue', clip_on=False)
-        circle3 = plt.Circle((0.5, 0.5), pattern2_radius, color='g', clip_on=False)
+            plt.axis('off')
+            filename = f'Visualization//{featurename}//{class_short_name}//04_Features//{i}_TargetClass.png'
+            plt.ioff()
+            plt.savefig(filename, bbox_inches='tight')
+            
+            # COMPLEMENT CLASS VISUALIZATION
+            circle1 = plt.Circle((0.5, 0.5), universe_radius, color='r', clip_on=False)
+            circle2 = plt.Circle((0.5, 0.5), class2_radius, color='blue', clip_on=False)
+            circle3 = plt.Circle((0.5, 0.5), pattern2_radius, color='g', clip_on=False)
 
-        fig, ax = plt.subplots()
-        ax.add_artist(circle1)
-        ax.add_artist(circle2)
-        ax.add_artist(circle3)
+            fig, ax = plt.subplots()
+            ax.add_artist(circle1)
+            ax.add_artist(circle2)
+            ax.add_artist(circle3)
 
-        textstr1 = title2
-        textstr2 = pattern_name
-        props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-        ax.text(-0.75, 1.60, textstr1, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
-        ax.text(-0.75, -0.65, textstr2, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
-        ax.text(1.25, -0.45, textstr3, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
+            textstr1 = title2
+            textstr2 = pattern_name
+            props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
+            ax.text(-0.75, 1.60, textstr1, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
+            ax.text(-0.75, -0.65, textstr2, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
+            ax.text(1.25, -0.45, textstr3, transform=ax.transAxes, fontsize=14, verticalalignment='top', bbox=props)
 
-        red_circle = mpatches.Patch(color='r', label=f'Total Data = {universe_members}')
-        blue_circle = mpatches.Patch(color='blue', label=f'Class Size = {round(class2_percentage,2)}% of the total data')
-        green_circle = mpatches.Patch(color='g', label=f'Pattern Support Size = {round(class2_support,2)}% of the class size')
+            red_circle = mpatches.Patch(color='r', label=f'Total Data = {universe_members}')
+            blue_circle = mpatches.Patch(color='blue', label=f'Class Size = {round(class2_percentage,2)}% of the total data')
+            green_circle = mpatches.Patch(color='g', label=f'Pattern Support Size = {round(class2_support,2)}% of the class size')
 
-        plt.legend(handles=[red_circle, blue_circle, green_circle], bbox_to_anchor=(1.75, 1.5))
+            plt.legend(handles=[red_circle, blue_circle, green_circle], bbox_to_anchor=(1.75, 1.5))
 
-        plt.axis('off')
-        filename = f'Visualization//{featurename}//{class_short_name}//04_Features//{i}_ComplementaryClass.png'
-        plt.ioff()
-        plt.savefig(filename, bbox_inches='tight')
+            plt.axis('off')
+            filename = f'Visualization//{featurename}//{class_short_name}//04_Features//{i}_ComplementaryClass.png'
+            plt.ioff()
+            plt.savefig(filename, bbox_inches='tight')
